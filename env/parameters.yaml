@@ -1,0 +1,11 @@
+adminUser:
+  password: vault:handpool/adminUser:password
+  username: admin
+enableDocker: false
+pipelineUser:
+  email: arcalos-admin@googlegroups.com
+  token: vault:handpool/pipelineUser:token
+  username: arcalos-bot
+prow:
+  hmacToken: vault:handpool/prow:hmacToken
+segmentWriteKey: vault:handpool:segmentWriteKey

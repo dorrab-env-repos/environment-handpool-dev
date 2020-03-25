@@ -1,40 +1,105 @@
 autoUpdate:
   enabled: true
-  schedule: '0 0 * * *'
+  schedule: 0 0 * * *
+bootConfigURL: https://github.com/cloudbees/arcalos-boot-config.git
 cluster:
-  clusterName: ""
-  environmentGitOwner: ""
-  project: ""
+  azure: {}
+  chartRepository: http://bucketrepo/bucketrepo/charts/
+  clusterName: handpool
+  environmentGitOwner: dorrab-env-repos
+  environmentGitPublic: true
+  externalDNSSAName: handpool-dn
+  gitKind: github
+  gitName: github
+  gitPublic: true
+  gitServer: https://github.com
+  gke:
+    projectNumber: "535834930178"
+  kanikoSAName: handpool-ko
+  namespace: jx
+  project: cbjx-handpool
   provider: gke
-  zone: ""
-gitops: true
-githubApp:
-  enabled: false
-  url: ""
-  schedule: '0 0 * * *'
+  registry: gcr.io
+  vaultName: handpool
+  vaultSAName: handpool-vt
+  zone: us-central1-c
 environments:
-- key: dev
-- key: staging
-- key: production
+- ingress:
+    cloud_dns_secret_name: external-dns-gcp-sa
+    domain: cbjx-handpool.play-jxaas.live
+    domainIssuerURL: https://jx-tenant-service-jx.aps-raccoonshimmer.play-jxaas.live
+    externalDNS: true
+    namespaceSubDomain: -jx.
+    tls:
+      email: jenkins-x@cloudbees.com
+      enabled: true
+      production: true
+  key: dev
+  repository: environment-handpool-dev
+- ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: staging
+  repository: environment-handpool-staging
+- ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: production
+  repository: environment-handpool-production
+githubApp:
+  enabled: true
+  schedule: 0 0 * * *
+  url: https://lighthouse-githubapp-jx.aps-raccoonshimmer.play-jxaas.live
+gitops: true
 ingress:
-  domain: ""
+  cloud_dns_secret_name: external-dns-gcp-sa
+  domain: cbjx-handpool.play-jxaas.live
+  domainIssuerURL: https://jx-tenant-service-jx.aps-raccoonshimmer.play-jxaas.live
   externalDNS: true
+  namespaceSubDomain: -jx.
   tls:
     email: jenkins-x@cloudbees.com
     enabled: true
-    production: false
+    production: true
 kaniko: true
+repository: bucketrepo
 secretStorage: vault
 storage:
+  backup:
+    enabled: true
+    url: gs://cbjx-handpool-backup
   logs:
-    enabled: false
-    url: ""
+    enabled: true
+    url: gs://cbjx-handpool-lts
   reports:
     enabled: false
     url: ""
   repository:
-    enabled: false
-    url: ""
+    enabled: true
+    url: gs://cbjx-handpool-repository
+vault:
+  aws: {}
+  bucket: cbjx-handpool-vault
+  key: handpool-crypto-key
+  keyring: handpool-keyring
+  name: handpool
+  serviceAccount: handpool-vt
 velero:
   namespace: velero
-webhook: prow
+  schedule: ""
+  serviceAccount: handpool-vo
+  ttl: ""
+versionStream:
+  ref: v0.0.325
+  url: https://github.com/cloudbees/arcalos-jenkins-x-versions.git
+webhook: lighthouse
